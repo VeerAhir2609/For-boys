@@ -2,110 +2,194 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Question</title>
+<title>Quick Question</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
   * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, sans-serif;
   }
 
   body {
-    margin: 0;
     height: 100vh;
-    background: radial-gradient(circle at top, #1f2933, #0f172a);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(120deg, #0b0b0b, #121212, #0f2027);
+    background-size: 300% 300%;
+    animation: bgMove 8s ease infinite;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #fff;
     overflow: hidden;
   }
 
-  .card {
-    background: rgba(255,255,255,0.06);
-    backdrop-filter: blur(10px);
-    padding: 50px 60px;
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .box {
+    background: rgba(18,18,18,0.95);
+    padding: 40px 50px;
     border-radius: 14px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 0 40px rgba(0,255,204,0.15);
     text-align: center;
-    color: #e5e7eb;
-    position: relative;
   }
 
   h1 {
-    font-size: 24px;
-    margin-bottom: 40px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-size: 28px;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
   }
 
   .buttons {
     position: relative;
-    width: 320px;
-    height: 120px;
-    margin: auto;
+    height: 80px;
   }
 
   button {
     position: absolute;
-    padding: 14px 32px;
-    font-size: 16px;
-    font-weight: 500;
+    padding: 14px 34px;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    user-select: none;
   }
 
-  #yes {
-    left: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  #yesBtn {
+    left: 40px;
+    background: #00ffcc;
+    color: #000;
+    box-shadow: 0 0 20px rgba(0,255,204,0.6);
+    transition: transform 0.2s ease;
+  }
+
+  #yesBtn:hover {
+    transform: scale(1.1);
+  }
+
+  #noBtn {
+    right: 40px;
+    background: #ff1744;
     color: #fff;
-    box-shadow: 0 8px 20px rgba(37,99,235,0.5);
-  }
-
-  #no {
-    right: 0;
-    bottom: 0;
-    background: #374151;
-    color: #e5e7eb;
-    transition: left 0.1s ease, top 0.1s ease;
+    box-shadow: 0 0 20px rgba(255,23,68,0.6);
   }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="box">
   <h1>Are you gay?</h1>
-
-  <div class="buttons" id="area">
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
+  <div class="buttons">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
   </div>
 </div>
 
 <script>
-  const noBtn = document.getElementById("no");
-  const area = document.getElementById("area");
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
 
-  function moveNoButton() {
-    const areaRect = area.getBoundingClientRect();
-    const btnRect = noBtn.getBoundingClientRect();
-
-    const maxX = areaRect.width - btnRect.width;
-    const maxY = areaRect.height - btnRect.height;
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+  function teleport() {
+    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+    noBtn.style.left = x + 'px';
+    noBtn.style.top = y + 'px';
   }
 
-  // Escape on hover AND when cursor gets close
-  noBtn.addEventListener("mouseenter", moveNoButton);
-  noBtn.addEventListener("mousemove", moveNoButton);
+  noBtn.addEventListener('mouseenter', teleport);
+  noBtn.addEventListener('touchstart', teleport);
+
+  yesBtn.onclick = () => {
+    document.body.innerHTML = `
+      <style>
+        body {
+          margin: 0;
+          height: 100vh;
+          background: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: system-ui, sans-serif;
+          overflow: hidden;
+        }
+
+        .glitch {
+          color: #00ffcc;
+          font-size: 22px;
+          letter-spacing: 2px;
+          animation: blink 0.15s steps(2) infinite;
+        }
+
+        @keyframes blink {
+          0% { opacity: 1; }
+          50% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+      </style>
+
+      <div class="glitch">PROCESSING RESPONSE...</div>
+    `;
+
+    setTimeout(showFinger, 1200);
+  };
+
+  function showFinger() {
+    document.body.innerHTML = `
+      <style>
+        body {
+          margin: 0;
+          height: 100vh;
+          background: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: system-ui, sans-serif;
+        }
+
+        .wrap {
+          text-align: center;
+          animation: pop 0.25s ease-out;
+        }
+
+        .finger {
+          font-size: 120px;
+          animation: shake 0.15s infinite alternate;
+        }
+
+        .text {
+          margin-top: 20px;
+          font-size: 28px;
+          letter-spacing: 2px;
+          color: #00ffcc;
+          font-weight: 800;
+        }
+
+        @keyframes shake {
+          from { transform: translateX(-6px) scale(1.05); }
+          to   { transform: translateX(6px) scale(1); }
+        }
+
+        @keyframes pop {
+          from { transform: scale(0.6); opacity: 0; }
+          to   { transform: scale(1); opacity: 1; }
+        }
+      </style>
+
+      <div class="wrap">
+        <div class="finger">🖕</div>
+        <div class="text">HERE. TAKE IT.</div>
+      </div>
+    `;
+  }
 </script>
 
 </body>
