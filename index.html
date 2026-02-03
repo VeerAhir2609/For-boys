@@ -7,64 +7,57 @@
 
 <style>
   * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
     font-family: system-ui, -apple-system, Segoe UI, sans-serif;
   }
 
   body {
+    margin: 0;
     height: 100vh;
-    background: linear-gradient(120deg, #0b0b0b, #121212, #0f2027);
-    background-size: 300% 300%;
-    animation: bgMove 8s ease infinite;
+    background: radial-gradient(circle at top, #0f2027, #000);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
     overflow: hidden;
-  }
-
-  @keyframes bgMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    color: #fff;
   }
 
   .box {
-    background: rgba(18,18,18,0.95);
-    padding: 40px 50px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 0 40px rgba(0,255,204,0.15);
+    background: rgba(15,15,15,0.95);
+    padding: 40px;
+    border-radius: 16px;
+    width: 320px;
     text-align: center;
+    box-shadow: 0 0 60px rgba(0,255,204,0.15);
   }
 
   h1 {
-    font-size: 28px;
     margin-bottom: 30px;
+    font-size: 26px;
     letter-spacing: 1px;
   }
 
+  /* ✅ BUTTON CONTAINER FIX */
   .buttons {
-    position: relative;
-    height: 80px;
+    position: relative;      /* IMPORTANT */
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   button {
-    position: absolute;
-    padding: 14px 34px;
-    font-size: 15px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    padding: 12px 28px;
     border-radius: 8px;
     border: none;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
     cursor: pointer;
   }
 
   #yesBtn {
-    left: 40px;
     background: #00ffcc;
     color: #000;
     box-shadow: 0 0 20px rgba(0,255,204,0.6);
@@ -76,10 +69,10 @@
   }
 
   #noBtn {
-    right: 40px;
     background: #ff1744;
     color: #fff;
     box-shadow: 0 0 20px rgba(255,23,68,0.6);
+    position: relative; /* starts inside the box */
   }
 </style>
 </head>
@@ -88,26 +81,36 @@
 
 <div class="box">
   <h1>Are you gay?</h1>
+
   <div class="buttons">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
+    <button id="yesBtn">YES</button>
+    <button id="noBtn">NO</button>
   </div>
 </div>
 
 <script>
-  const noBtn = document.getElementById('noBtn');
-  const yesBtn = document.getElementById('yesBtn');
+  const noBtn = document.getElementById("noBtn");
+  const yesBtn = document.getElementById("yesBtn");
 
   function teleport() {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.left = x + 'px';
-    noBtn.style.top = y + 'px';
+    const padding = 20;
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+
+    noBtn.style.position = "fixed"; // escape the card
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
   }
 
-  noBtn.addEventListener('mouseenter', teleport);
-  noBtn.addEventListener('touchstart', teleport);
+  // Run away on hover / click / touch
+  noBtn.addEventListener("mouseenter", teleport);
+  noBtn.addEventListener("click", teleport);
+  noBtn.addEventListener("touchstart", teleport);
 
+  // YES click → middle finger screen
   yesBtn.onclick = () => {
     document.body.innerHTML = `
       <style>
@@ -119,68 +122,29 @@
           align-items: center;
           justify-content: center;
           font-family: system-ui, sans-serif;
-          overflow: hidden;
         }
-
-        .glitch {
-          color: #00ffcc;
-          font-size: 22px;
-          letter-spacing: 2px;
-          animation: blink 0.15s steps(2) infinite;
-        }
-
-        @keyframes blink {
-          0% { opacity: 1; }
-          50% { opacity: 0; }
-          100% { opacity: 1; }
-        }
-      </style>
-
-      <div class="glitch">PROCESSING RESPONSE...</div>
-    `;
-
-    setTimeout(showFinger, 1200);
-  };
-
-  function showFinger() {
-    document.body.innerHTML = `
-      <style>
-        body {
-          margin: 0;
-          height: 100vh;
-          background: #000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: system-ui, sans-serif;
-        }
-
         .wrap {
           text-align: center;
           animation: pop 0.25s ease-out;
         }
-
         .finger {
           font-size: 120px;
           animation: shake 0.15s infinite alternate;
         }
-
         .text {
           margin-top: 20px;
-          font-size: 28px;
+          font-size: 26px;
           letter-spacing: 2px;
           color: #00ffcc;
           font-weight: 800;
         }
-
         @keyframes shake {
-          from { transform: translateX(-6px) scale(1.05); }
-          to   { transform: translateX(6px) scale(1); }
+          from { transform: translateX(-6px); }
+          to { transform: translateX(6px); }
         }
-
         @keyframes pop {
           from { transform: scale(0.6); opacity: 0; }
-          to   { transform: scale(1); opacity: 1; }
+          to { transform: scale(1); opacity: 1; }
         }
       </style>
 
@@ -189,7 +153,7 @@
         <div class="text">HERE. TAKE IT.</div>
       </div>
     `;
-  }
+  };
 </script>
 
 </body>
